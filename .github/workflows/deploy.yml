@@ -1,0 +1,22 @@
+name: Deploy Static Website
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Copy HTML to Server via SCP
+      uses: appleboy/scp-action@v0.1.2
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "home.html"
+        target: "/var/www/html"
