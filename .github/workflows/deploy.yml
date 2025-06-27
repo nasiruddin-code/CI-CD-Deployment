@@ -9,22 +9,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Set up SSH key
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
-        chmod 600 key.pem
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
 
-    - name: Copy HTML to EC2 using SCP
-      run: |
-        echo "Starting SCP transfer..."
-        scp -i key.pem -o StrictHostKeyChecking=no index.html ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/html/
-        echo "SCP transfer completed."
+      - name: Copy HTML to EC2 using SCP
+        run: |
+          echo "Starting SCP transfer..."
+          scp -i key.pem -o StrictHostKeyChecking=no index.html ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/html/
+          echo "SCP transfer completed."
 
-    - name: Optional: Verify file on EC2
-      run: |
-        echo "Verifying file on EC2..."
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "ls -l /var/www/html/index.html"
-        echo "Verification complete."
+      - name: Optional: Verify file on EC2
+        run: |
+          echo "Verifying file on EC2..."
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "ls -l /var/www/html/index.html"
+          echo "Verification complete."
